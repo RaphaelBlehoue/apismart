@@ -1,1 +1,6 @@
+labs_api:
+    resource: "@LabsApiBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 

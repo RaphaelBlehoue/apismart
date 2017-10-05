@@ -2,6 +2,8 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: fos_rest/fos_rest.yml }
+    - { resource: others/doctrine_migrations.yml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -56,9 +58,18 @@ doctrine:
         #path: '%database_path%'
 
     orm:
-        auto_generate_proxy_classes: '%kernel.debug%'
-        naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
+        auto_generate_proxy_classes: "%kernel.debug%"
+        entity_managers:
+            default:
+                naming_strategy: doctrine.orm.naming_strategy.underscore
+                auto_mapping: true
+                mappings:
+                    gedmo_tree:
+                        type: annotation
+                        prefix: Gedmo\Tree\Entity
+                        dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
+                        alias : GedmoTree # (optional) it will default to the name set for the mapping
+                        is_bundle: false
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -67,29 +78,3 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
-
-fos_rest:
-    routing_loader:
-        include_format: false
-    serializer:
-        serialize_null: true
-    body_converter:
-        enabled: true
-        validate: true
-        validation_errors_argument: validationErrors #argument for errors check
-    view:
-        formats: { json: true, xml: false, rss: false }
-        mime_types: { "json" : [ "application/json", "application/json;version=0.1", "application/json;version=0.2" ]}
-        view_response_listener:
-            enabled: true
-    format_listener:
-        rules:
-            path: '^/'
-            priorities: ['json']
-            fallback_format: json
-    versioning:
-        enabled: true
-        resolvers:
-            media_type:
-                enabled: true
-                regex: /(v|version)=(?P<version>[0-9\.]+)/
