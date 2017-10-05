@@ -1,10 +1,10 @@
 {
-    "name": "raphael/smart-api",
+    "name": "vagrant/smart-api.dev",
     "license": "proprietary",
     "type": "project",
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "": "src/AppBundle"
         },
         "classmap": [
             "app/AppKernel.php",
